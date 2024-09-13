@@ -200,11 +200,17 @@ lastDayInMonth <- weather %>%
 
 
 ggplot(weather) +
-    geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+    geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+    geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
     geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
     theme_classic() +
   geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
-  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2)
+  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+  scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+  theme_classic(
+    
+  )
+  
   
   
 # scale_x_continuous(breaks = , labels= )
@@ -256,6 +262,16 @@ After we debrief on these approaches, we'll finalize this part of the plot toget
 Work together until your precipitation plot looks as below.
 
 ![](https://mac-stat.github.io/images/212/weather_plot_precip-1.png)
+```{r}
+weather %>%
+  ggplot() + 
+  geom_(aes(x = dateInYear, y = CulmPrec))
+```
+
+
+
+
+
 
 - The triangles point to precipitation records. Refer to the Codebook above for the `RecordP` variable.
 - The numbers on the plot indicate the total precipitation for the month. Do some searching about the `hjust` and `vjust` options to adjust the alignment of the numbers.

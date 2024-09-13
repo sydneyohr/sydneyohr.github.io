@@ -1,11 +1,27 @@
 ---
-title: "sydneyohr.github.io"
+title: "Sydney Ohr"
+about:
+  id: intro-heading
+  template: trestles
+  image: images/profilepic.jpg
+  links: 
+    - icon: github
+      href: https://github.com/sydneyohr
 ---
 
-This is a Quarto website.
+Hello! My name is Sydney Ohr and I am a current junior at Macalester College pursuing a B.A in Data Science.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+\
+**Education**
 
-```{r}
-1 + 1
-```
+**Macalester College \| St. Paul MN**
+
+**B.A. in Data Science \| August 2022 - May 2026**
+
+\
+
+
+
+\
+
+\
