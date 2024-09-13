@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Sydney Ohr",
-    "section": "",
-    "text": "Hello! My name is Sydney Ohr and I am a current junior at Macalester College pursuing a B.A in Data Science.\n\nEducation\nMacalester College | St. Paul MN\nB.A. in Data Science | August 2022 - May 2026"
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
@@ -19,5 +12,12 @@
     "title": "Projects",
     "section": "",
     "text": "I will add projects here eventually."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Sydney Ohr",
+    "section": "",
+    "text": "Hello! My name is Sydney Ohr and I am a current junior at Macalester College pursuing a B.A in Data Science.\n\nEducation\nMacalester College | St. Paul MN\nB.A. in Data Science | August 2022 - May 2026"
   }
 ]

@@ -211,7 +211,7 @@ ggplot(weather) +
     
   )
   
-  
+points
   
 # scale_x_continuous(breaks = , labels= )
 # month.abb
@@ -263,9 +263,7 @@ Work together until your precipitation plot looks as below.
 
 ![](https://mac-stat.github.io/images/212/weather_plot_precip-1.png)
 ```{r}
-weather %>%
-  ggplot() + 
-  geom_(aes(x = dateInYear, y = CulmPrec))
+
 ```
 
 
