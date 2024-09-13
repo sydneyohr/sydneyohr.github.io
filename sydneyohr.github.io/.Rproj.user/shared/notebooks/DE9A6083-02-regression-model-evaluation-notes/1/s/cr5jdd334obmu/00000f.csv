@@ -1,5 +1,0 @@
-"0","new_model %>% "
-"0","  augment(new_data = simulated_data) %>% "
-"0","  ggplot(aes(x = .pred, y = .resid)) + "
-"0","    geom_point(size = 0.1) + "
-"0","    geom_hline(yintercept = 0)"

@@ -1,5 +1,0 @@
-"0","ggplot(weather, aes(y = temp3pm, x = temp9am)) + "
-"0","  geom_point() + "
-"0","  geom_smooth(method = ""lm"") "
-"1","[38;5;253m`geom_smooth()` using formula = 'y ~ x'[39m
-"

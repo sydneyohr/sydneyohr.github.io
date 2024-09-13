@@ -1,4 +1,0 @@
-"0","ggplot(nc) +"
-"0","    geom_sf() +"
-"0","    theme_classic() +"
-"0","    labs(title = ""NAD27"")"

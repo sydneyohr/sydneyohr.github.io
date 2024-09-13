@@ -1,3 +1,0 @@
-"0","ggplot(bikes, aes(y = rides, x = temp, color = windspeed)) + "
-"0","  geom_point() +  "
-"0","  facet_wrap(~weekend)"

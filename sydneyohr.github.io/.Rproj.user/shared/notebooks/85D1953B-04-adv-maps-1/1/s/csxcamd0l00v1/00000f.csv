@@ -1,7 +1,0 @@
-"0","ggplot() +"
-"0","    geom_sf(data = mn_counties, fill = ""white"") + "
-"0","    geom_sf(data = mn_cities %>% filter(Population >= 10000), mapping = aes(color = Population, size = Population)) + # cities layer"
-"0","    scale_color_viridis_c() + # continuous (gradient) color scale"
-"0","    labs(title = ""Minnesota Cities with Population >= 10,000"") + "
-"0","    ggthemes::theme_map() +"
-"0","    theme(legend.position = ""bottom"") # move legend"

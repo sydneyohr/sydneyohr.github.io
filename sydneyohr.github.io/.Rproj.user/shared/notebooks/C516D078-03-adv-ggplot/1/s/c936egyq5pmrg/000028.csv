@@ -1,4 +1,0 @@
-"0",""
-"0","weather %>%"
-"0","  select(High, dateInYear, Record) %>%"
-"0","  filter(Record == TRUE)"

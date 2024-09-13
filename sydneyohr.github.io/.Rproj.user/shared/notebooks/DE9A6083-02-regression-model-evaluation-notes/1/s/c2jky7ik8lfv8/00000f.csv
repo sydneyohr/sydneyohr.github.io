@@ -1,3 +1,0 @@
-"0","lm_spec <- linear_reg() %>%   # we want a linear regression model"
-"0","  set_mode(""regression"") %>%  # this is a regression task (y is quantitative)"
-"0","  set_engine(""lm"")            # we'll estimate the model using the lm function"

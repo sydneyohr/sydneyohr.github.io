@@ -1,8 +1,0 @@
-"0","# YOUR TURN"
-"0","# Fit bike_model_2 & check out the coefficients"
-"0",""
-"0","bike_model_2 <- lm_spec %>%"
-"0","  fit(rides ~ windspeed + temp + weekend, data = bikes)"
-"0",""
-"0","bike_model_2 %>%"
-"0","  tidy()"

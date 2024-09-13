@@ -1,4 +1,0 @@
-"0","# Calculate MAE for the first model"
-"0","bike_model_1 %>% "
-"0","  augment(new_data = bikes) %>% "
-"0","  mae(truth = rides, estimate = .pred)"

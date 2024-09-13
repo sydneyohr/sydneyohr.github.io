@@ -1,3 +1,0 @@
-"0","# Predict ridership on a 60 degree day with 20 mph winds"
-"0","bike_model_1 %>% "
-"0","  augment(new_data = data.frame(windspeed = 20, temp = 60))"

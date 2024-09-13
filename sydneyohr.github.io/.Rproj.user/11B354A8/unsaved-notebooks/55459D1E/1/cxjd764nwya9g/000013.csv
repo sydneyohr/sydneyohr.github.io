@@ -1,4 +1,0 @@
-"0",""
-"0","# Summary statistics"
-"0","weather %>% "
-"0","  summarize(min(temp3pm), median(temp3pm), max(temp3pm))"
