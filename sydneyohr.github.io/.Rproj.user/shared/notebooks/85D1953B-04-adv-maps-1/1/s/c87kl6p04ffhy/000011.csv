@@ -1,0 +1,6 @@
+"0","# Load country boundaries data as sf object"
+"0","mn_counties <- USAboundaries::us_counties(resolution = ""high"", states = ""Minnesota"")"
+"0",""
+"0","# Take care of duplicate column names (there are two identical ""state_name"" columns)"
+"0","names_counties <- names(mn_counties)"
+"0","names(mn_counties)[names_counties == ""state_name""] <- c(""state_name1"", ""state_name2"")"

@@ -1,0 +1,315 @@
+# Learning goals
+
+After this lesson, you should be able to:
+
+- Navigate the [ggplot2 reference page](https://ggplot2.tidyverse.org/reference/) to find the functions needed to create a desired visualization
+- Use the information on a function help page to construct desired plot features
+    - Scan the information in the **Usage** section to identify function arguments that must be set
+    - Understand how the function arguments work by using information in the **Arguments** section
+    - Use the information in the the **Aesthetics** and **Examples** sections to control plot appearance
+- Identify when it would be necessary to use different `data` arguments within the `ggplot()` and `geom_()` layers
+
+
+<br><br><br><br>
+
+
+# Case study: recreating a NYT visualization
+
+Put this template in a folder called `adv_ggplot` within a folder for this course.
+
+## The goal
+
+We are going to recreate [this NYT visualization](https://www.nytimes.com/interactive/2016/02/19/us/2015-year-in-weather-temperature-precipitation.html) on record setting temperatures by expanding our `ggplot2` toolbox using data from San Francisco (SFO) in 2011.
+
+## Setup
+
+First load the `tidyverse` package, and read in the San Francisco weather data.
+
+```{r setup}
+library(tidyverse)
+weather <- read_csv("https://mac-stat.github.io/data/sfo_weather.csv")
+```
+
+## Codebook
+
+You will need to refer to the variable codebook below throughout this activity.
+
+- `Month`: Month of the year (1-12)
+- `Day`: Day within the month (1-31)
+- `Low`/`High`: Low/high temperature this day
+- `NormalLow`/`NormalHigh`: Typical low/high temperature for this day of the year
+- `RecordLow`/`RecordHigh`: Record low/high temperature for this day of the year
+- `LowYr`/`HighYr`: Year in which the record low/high was observed
+- `Precip`: Amount of precipitation (inches) this day
+- `RecordPrecip`: Record amount of precipitation for this day of the year
+- `PrecipYr`: Year in which the record precipitation was observed
+- `date`: The actual date in 2011 for this day in YYYY-MM-DD format
+- `dateInYear`: What day of the year is it? (1-365)
+- `Record`: Logical (TRUE/FALSE) indicating whether this day had a high temperature record
+- `RecordText`: Text that displays the record high for this day (`"Record high: ##"`)
+- `RecordP`: Logical (TRUE/FALSE) indicating whether this day had a precipitation record
+- `CulmPrec`: Cumulative precipitation for the month up to this day
+
+
+<br><br>
+
+
+## Class exercises
+
+**Class exercise 1:** Examine the temperature visualization in the [original NYT article](https://www.nytimes.com/interactive/2016/02/19/us/2015-year-in-weather-temperature-precipitation.html). Discuss the following two aspects with your group:
+
+- **Data storytelling:** Relate the intro paragraph ("Scientists declared that 2015 was Earth’s hottest year on record...") to the *design* of the visualization: Based on the intro paragraph, what key message/claim does NYT want readers to be able to explore? How did this goal inform what information is displayed in the visualization?
+- **Technical implementation:** What specific variables (from the codebook) underlie the visualization, and how do they map to aesthetics of the visual elements (e.g., position, size, shape, and color of the glyphs)?
+
+Discussion Notes:
+Reason for using 2015 is because it was the hottest year on record at the time
+Three different temperatures shown: average/normal temperature for the day, actual temperature in 2015, and the record high and low
+Variables: temperature, date/day
+The 
+
+Glyphs/Symbols: 
+
+bar
+  - x: day of the year
+  - y: daily high and low temperature
+  - color: red color
+
+bar
+  - x: day of the year
+  - y: record high and low temperature
+  - color: tan color
+  
+bar
+  - x: day of the year
+  - y: normal high and low temperature
+  - color: grey color
+
+globe (fixed symbol)
+  - x: 350 (December)
+  - y: max record high for the city
+
+Legend (rectange and text)
+  - x: 185 (July)
+  - y: 0 (ish)
+  
+Axis Labels:
+  
+X-axis:
+  -x: ??
+  -y: below the graph
+  text: Name of the Month
+
+Y-axis:
+  -x: left of the graph
+  -y: ??
+  text: 
+
+------------------------------------------------------------------------
+
+We can explore the "Geoms" section of the [ggplot2 reference page](https://ggplot2.tidyverse.org/reference/) to find a `geom` that corresponds to the visual elements in the temperature plot.
+
+**Class exercise 2:** Using both the small example visuals on the right and the names of the `geom`'s, brainstorm some possibilities for `geom`'s we might use to recreate the temperature visualization.
+
+
+Possible `geom`'s:
+
+geom_col
+geom_boxplot
+geom_linerange
+geom_map
+geom_point
+geom_label / geom_text
+geom_ribbon
+geom_tile
+geom_rect
+geom_raster
+geom_segment
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+We need to explore further by opening up the `geom` reference pages to understand if a particular `geom` is suitable for our task. We'll look at the `geom_point` [documentation page](https://ggplot2.tidyverse.org/reference/geom_point.html) to learn the process for reading a documentation page.
+
+When looking at a help page, it is useful to first look at the **Usage** and **Arguments** sections. 
+
+The **Usage** section shows all of the possible inputs (arguments) to the geom--these are all of the ways that a `geom` can be customized. Just looking at the argument names can help give a hint as to what arguments might fit our needs.
+
+The **Arguments** section explains in detail what each argument does and the possible values the argument can take. The `mapping`, `data`, and `...` arguments will be the most commonly used by far.
+
+- `mapping`: This is the argument that is being used when you specify a plots `aes`thetics (the code inside `aes()`).
+- `data`: This is where you specify the dataset containing the variables that the `geom` is using.
+- `...`: You will tend to use this for fixed aesthetics (ones that don't correspond to a variable). For example, this is where you can set the color of all points (e.g., with `color = "red"`) or the size of all points (e.g., with `size = 3`).
+
+**A note about the `data` argument:** Previously you have used one dataset per plot by specifying that as the first argument of `ggplot()`. For example, the code below makes a scatterplot of price vs. carat in the `diamonds` dataset, and the only `data` argument is in `ggplot()` (none in `geom_point()`).
+
+```{r diamonds_scatter}
+data(diamonds)
+head(diamonds)
+
+ggplot(diamonds, aes(x = carat, y = price)) +
+    geom_point() +
+    theme_classic()
+```
+
+```{r diamonds_scatter_explicit_args}
+# Note that we can make the same plot by specifying the argument names explicitly:
+ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
+    geom_point() +
+    theme_classic()
+```
+
+Sometimes we may want to use more than one dataset in a plot. For example, we have a separate dataset that contains average prices of diamonds by carat:
+
+```{r create_diamonds_avg, echo=FALSE}
+diamonds_avg_price <- diamonds %>%
+    group_by(carat) %>%
+    summarize(avg_price = mean(price)) %>%
+    arrange(carat)
+diamonds_avg_price <- diamonds_avg_price[seq(1,nrow(diamonds_avg_price),3),]
+head(diamonds_avg_price)
+```
+
+We can use this separate `diamonds_avg_price` dataset in the `geom_point()` layer to add average price information to our scatterplot:
+
+```{r diamonds_scattter_with_avgs}
+ggplot(diamonds, aes(x = carat, y = price)) +
+    geom_point() +
+    geom_point(data = diamonds_avg_price, aes(x = carat, y = avg_price), color = "deepskyblue", size = 3)
+```
+
+The **Aesthetics** section of a `geom` documentation page gives information on how the visual elements of the `geom` correspond to data. For example, the `geom_point` [documentation page](https://ggplot2.tidyverse.org/reference/geom_point.html) shows that the familiar `x` and `y` aesthetics are available. It also shows some new aesthetics like `stroke`.
+
+We can use the same process to look at the `geom_linerange` [documentation page](https://ggplot2.tidyverse.org/reference/geom_linerange.html) and start off our temperature visualization with the record lows and highs:
+
+```{r weather_plot_temp_records}
+
+weather %>%
+  select(High, dateInYear, Record) %>%
+  filter(Record == TRUE)
+
+lastDayInMonth <- weather %>%
+  group_by(Month) %>%
+  filter(Day == max(Day)) %>%
+  slice(1:11)
+  
+  
+
+
+ggplot(weather) +
+    geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+    geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+    theme_classic() +
+  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2)
+  
+  
+# scale_x_continuous(breaks = , labels= )
+# month.abb
+
+```
+
+
+
+
+::: {.callout-tip collapse="false" title="Keyboard shortcuts"}
+As you work on this plot, try to use some new [keyboard shortcuts](https://lmyint.github.io/IntermediateDataSciNotes/keyboard.html). Focus on the following:
+
+- Insert code chunk: `Ctrl+Alt+I` (Windows). `Option+Command+I` (Mac).
+- Run current code chunk: `Ctrl+Shift+Enter` (Windows). `Command+Shift+Return` (Mac).
+- Run current line/currently selected lines: `Ctrl+Enter` (Windows). `Command+Return` (Mac).
+:::
+
+**Class exercise 3:** Add to your temperature visualization to also display the usual temperatures (`NormalLow` and `NormalHigh`), and actual 2011 temperatures (`Low` and `High`). Your plot should look like the one below. The tan color for the usual temperatures is `"#C8B8BA"`, and the red color for the actual temperatures is `"#A90248"`.
+
+![](https://mac-stat.github.io/images/212/weather_plot_temp_all-1.png)
+
+------------------------------------------------------------------------
+
+Let's now try to recreate the visual demarcations of the months by adding vertical lines separating the months.
+
+**Class exercise 4:** Brainstorm with your groups how we might draw those vertical lines. What `geom` might we use? What subset of the data might we use in that `geom` layer to draw lines only at the month divisions? One person from your group should write your ideas on the board.
+
+Once ideas are up on the board, we'll work through this together as a class.
+
+------------------------------------------------------------------------
+
+Now let's change the x-axis labels so that the month names display in the center of each month's slice of the plot. (Note that R has built-in variables called `month.abb` and `month.name` that contain abbreviated and full month names.)
+
+**Class exercise 5:** We will explore two different approaches to figuring out this new challenge: Google search and AI.
+
+- **Google:** Start by just using Google search queries. Collaborate with your group to try to word your search queries as carefully as possible (using the jargon that is most likely to return the most relevant results). Record search queries and your thought process in selecting which search results to look at first.
+
+- **AI:** Next use [ChatGPT](https://chat.openai.com/) or [Gemini](https://gemini.google.com/). Collaborate with your group to brainstorm a series of prompts that will most efficiently get you the desired results. Record the chat prompts used and output given. Evaluate the output. Do you fully understand the code generated? How can you tell that the generated code is correct?
+
+After we debrief on these approaches, we'll finalize this part of the plot together.
+
+
+<br><br>
+
+
+## Group work
+
+Work together until your precipitation plot looks as below.
+
+![](https://mac-stat.github.io/images/212/weather_plot_precip-1.png)
+
+- The triangles point to precipitation records. Refer to the Codebook above for the `RecordP` variable.
+- The numbers on the plot indicate the total precipitation for the month. Do some searching about the `hjust` and `vjust` options to adjust the alignment of the numbers.
+- The blue and tan colors are `"#32a3d8"` and `"#ebeae2"`.
+
+
+::: {.callout-tip collapse="false" title="Reminder: Record and observe"}
+As you work through this new phase of the plot, makes notes in your personal class journal about anything that you tried that didn't work the way you wanted: geoms that you tried but didn't make the right plot, faulty aesthetic mappings, error messages, and warning messages.
+
+Also be aware of your comforts and discomforts in this collaborative environment. Pay attention to the comforts and discomforts of your groupmates.
+
+We'll have a few minutes at the end of class to reflect holistically on today's activity.
+:::
+
+<br>
+
+If you have time, keep working with each other on your plots to get them to look as below (which shows your goal for Challenge 1).
+
+![SFO weather in 2011 (minimum requirements for Challenge 1 submission)](https://bcheggeseth.github.io/212_fall_2024/images/hw1_goal.png)
+
+
+<br><br>
+
+## GitHub Co-Pilot
+
+Go to the [Github Copilot notes](https://bcheggeseth.github.io/212_fall_2024/notes/copilot.html). Read the introductory information and follow those instructions to setup Github Copilot in RStudio [Having the Github Student Benefits is required]. 
+
+Then play with Github Copilot in RStudio or another Generative AI as you work on Challenge 1. Share your thoughts about the tool in the #sharing-is-caring channel on Slack.
+
+
+<br><br>
+
+
+## Reflect
+
+In terms of both coding and collaboration, what challenges did you face today? What did you do to address those challenges? What would you like to try for next time?
+
+Take a few minutes to write some thoughts in your personal course journal.
+
+
+<br><br><br><br>
+
+
+# Challenge 1
+
+Navigate to [Challenge 1](https://classroom.github.com/a/m9GRbI4P) on GitHub to clone the repository for this challenge. Move this qmd into that folder. Challenge 1 involves finishing this NYT visualization recreation and is part of [Homework 1](https://bcheggeseth.github.io/212_fall_2024/homeworks/homework1.html).
+
+
+<br><br><br><br>
+
+
+# Announcements
+
+- Take a look at the [Schedule page](https://bcheggeseth.github.io/212_fall_2024/logistics/schedule.html) to see how to prepare for Thursday's class (typically a reading + CP).
+- Look through your peers' introductions in the `#introductions` channel on [Slack](https://mac-stat-212.slack.com) to see who you connect with and who might be a potential good project partner.
+    - If you have not already introduced yourself, please post an introduction so that others can connect with you.
+- Homework 1 is due 9/13; there are many separate tasks including Challenge 1.

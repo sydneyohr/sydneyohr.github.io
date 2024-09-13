@@ -1,0 +1,70 @@
+---
+title: "Homework 1"
+author: Sydney Ohr
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(pracma)
+```
+
+
+### 5.) Traffic Flow
+
+Below you find a section of one-way streets in downtown St Paul, where the arrows indicate traffic direction. 
+The traffic control center has installed electronic sensors that count the numbers of vehicles passing through the 6
+streets that lead into and out of this area.  Assume that the total flow that enters each intersection equals the the total flow that leaves 
+each intersection (we will ignore parking and staying). 
+
+<center>
+
+![](HW1Traffic.png){width=50%}
+
+</center>
+
+
+a. Create a system of linear equations to find the possible flow values for the inner streets $x_1, x_2, x_3, x_4$.
+
+x1 - x4 = 160
+X1 - X2 = 240
+X3 - X2 = 600
+X3 - X4 = 520
+
+b. Using RStudio, enter the augmented matrix of this system, and solve it using the rref command. Type out the general solution to this system of equations.  We will learn how to do this **in class** on Monday. 
+
+```{r}
+c <- rbind(c(1,0,0,-1, 160), c(1,-1,0,0, 240), c(0,-1,1,0, 600), c(0,0,1,-1, 520))
+rref(c)
+```
+
+
+c. How many solutions does your system have? Why might that be? Be sure to reference the model of the problem.
+There are infinite solutions. Column 3 has free variables, meaning there are infinite ways to satisfy the system. Also, there is no way to control the flow of cars entering and leaving the intersections.
+
+d. Give two distinct solutions for this system that are realistic in terms of  **traffic flow**.
+
+```{r}
+e <- rbind(c(1,0,0,60, 160), c(1,-1,0,60, 240), c(0,-1,1,60, 600), c(0,0,1,60, 520))
+rref(e) #if x4 = 60
+
+f <- rbind(c(1,0,0,70, 160), c(1,-1,0,70, 240), c(0,-1,1,70, 600), c(0,0,1,70, 520))
+rref(f) #if x4 = 70
+```
+
+
+e. Is it possible to close down the street labeled by $x_2$ for road construction? That is, is it possible to have $x_2 = 0$ and to meet the other conditions?
+
+```{r}
+d <- rbind(c(1,0,0,-1, 160), c(1,0,0,0, 240), c(0,0,1,0, 600), c(0,0,1,-1, 520))
+rref(d)
+```
+Yes. Based on the RREF, it is possible to close street X2. 
+
+<br>
+<br>

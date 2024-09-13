@@ -1,0 +1,8 @@
+"0","library(ggplot2)"
+"0","library(dplyr)"
+"0","library(fivethirtyeight)"
+"2","Some larger datasets need to be installed separately, like senators and house_district_forecast. To
+install these, we recommend you install the fivethirtyeightdata package by running:
+install.packages('fivethirtyeightdata', repos = 'https://fivethirtyeightdata.github.io/drat/', type =
+'source')
+"

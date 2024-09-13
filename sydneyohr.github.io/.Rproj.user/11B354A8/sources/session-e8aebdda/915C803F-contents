@@ -1,0 +1,224 @@
+---
+title: "Practice Problems 1 - SOLUTIONS"
+format: 
+  html:
+    embed-resources: true
+---
+
+# Purpose
+
+The goal of this set of practice problems is to practice the following skills:
+
+- Constructing and interpreting visualizations that inform research questions of interest
+- Data wrangling
+- Constructing and interpreting simple linear regression models
+
+
+
+# Directions
+
+1. We will be using data from the `fivethirtyeight` package. Install this package by entering the `install.packages()` command in the **Console**. (Do not include the installation command in this file--your document won't render to the required HTML file!)
+
+2. Create a code chunk in which you load the `ggplot2`, `dplyr`, and `fivethirtyeight` packages.
+
+3. Continue with the exercises below. You will need to create new code chunks to construct visualizations and models and write interpretations beneath. Put text responses in blockquotes as shown below:
+
+> Response here. (The > at the start of the line starts a blockquote and makes the text larger and easier to read.)
+
+4. Render your work for submission:
+    - Click the "Render" button in the menu bar for this pane (blue arrow pointing right). This will create an HTML file containing all of the directions, code, and responses from this activity. A preview of the HTML will appear in the browser.
+    - Scroll through and inspect the document to check that your work translated to the HTML format correctly.
+    - Close the browser tab.
+    - Go to the "Background Jobs" pane in RStudio and click the Stop button to end the rendering process.
+    - Locate the rendered HTML file in the folder where this file is saved. Open the HTML to ensure that your work looks as it should (code appears, output displays, interpretations appear). Upload this HTML file to Moodle.
+
+```{r setup}
+library(ggplot2)
+library(dplyr)
+library(fivethirtyeight)
+```
+
+
+# Exercises
+
+## Context
+
+This cartoon by Alison Bechdel inspired the "Bechdel test" ([image source](https://en.wikipedia.org/wiki/Bechdel_test#/media/File:Dykes_to_Watch_Out_For_(Bechdel_test_origin).jpg)):
+
+![](https://upload.wikimedia.org/wikipedia/en/b/bf/Dykes_to_Watch_Out_For_%28Bechdel_test_origin%29.jpg)
+
+A movie passes the test if it meets the following criteria:
+
+- there are at least 2 women-identifying characters;    
+- these characters talk to each other at least 1 time; and    
+- they talk about something other than a male-identifying character
+
+We'll work with the `bechdel` data within the `fivethirtyeight` package. You can enter `?bechdel` in the Console to view the codebook.
+
+```{r}
+# Load the data
+data(bechdel)
+```
+
+
+
+## Exercise 1: Define two new variables
+
+```{r}
+bechdel <- bechdel %>% 
+    mutate(
+        budget_mil = budget_2013/1000000,
+        intgross_mil = intgross_2013/1000000
+    )
+
+bechdel %>% 
+    select(budget_mil, intgross_mil) %>% 
+    head(3)
+```
+
+
+
+## Exercise 2: Get to know the data
+
+```{r}
+# How many films are in the dataset?
+nrow(bechdel) # (or use dim)
+
+# When was the oldest film in the dataset made?
+bechdel %>% 
+    summarize(min(year))
+
+# When was the most recent film in the dataset made?
+bechdel %>% 
+    summarize(max(year))
+
+# What is the median film budget in 2013 dollars?
+bechdel %>% 
+    summarize(median(budget_mil))
+
+# What films had budgets that exceeded 300 million in 2013 dollars?
+# NOTE: it's also ok to not include the select line
+bechdel %>% 
+    filter(budget_mil > 300) %>% 
+    select(title, budget_mil)
+
+# What films were made in 1971?
+# NOTE: it's also ok to not include the select line
+bechdel %>% 
+    filter(year == 1971) %>% 
+    select(title, year)
+
+# What were the budget_mil and intgross_mil values for "Titanic"?
+# NOTE: it's also ok to not include the select line
+bechdel %>% 
+    filter(title == "Titanic") %>% 
+    select(budget_mil, intgross_mil)
+```
+
+
+
+## Exercise 3: Does it pass the Bechdel?
+
+Discussions will vary. In general, they should point out that, overall, under half of films pass the Bechdel test (are "ok"). Further, there should be some discussion of the films that don't pass. For example, among the films that fail the test, most are because two women characters don't talk to one another.
+
+```{r}
+ggplot(bechdel, aes(x = clean_test)) + 
+    geom_bar()
+
+bechdel %>% 
+    count(clean_test)
+```
+
+
+
+
+## Exercise 4: How much money did it make?
+
+The `intgross_mil` variable records each movie's total international gross, in millions of dollars (and adjusted to 2013).
+
+a. Almost all movies grossed under \$1,000,000,000 with the majority grossing under \$500,000,000. The distribution is right-skewed with an outlier – a movie that grossed much higher than the others (more than \$3,000,000,000).
+
+```{r}
+# A histogram, density plot, boxplot, or other would work. You only need one!
+ggplot(bechdel, aes(x = intgross_mil)) +
+    geom_histogram()
+```
+
+
+b. The mean is pulled up by the outliers, whereas the median isn't influenced by these outliers (it's calculated using only the middle numbers). In this case, the mean provides a misleading calculation of what’s "typical", thus the median is more appropriate here.
+
+```{r}
+bechdel %>% 
+    summarize(
+        mean(intgross_mil, na.rm = TRUE),
+        median(intgross_mil, na.rm = TRUE)
+    )
+```
+
+
+c. There's more variability in how much money movies make at the box office than in how much money is spent making movies.
+
+```{r}
+bechdel %>% 
+    summarize(
+        sd(intgross_mil, na.rm = TRUE),
+        sd(budget_mil, na.rm = TRUE)
+    )
+```
+
+
+
+
+## Exercise 5: Explaining `intgross_mil`
+
+Next, let's try to *explain* some of the variability in how much money films gross. To this end, we'll focus on modeling `intgross_mil` by `budget_mil`. That is, to what extent is the money a film makes related to its budget?
+
+a. Response = `intgross_mil`. Predictor = `budget_mil`
+
+b.
+
+```{r}
+ggplot(bechdel, aes(y = intgross_mil, x = budget_mil)) + 
+    geom_point() + 
+    geom_smooth(method = "lm", se = FALSE)
+```
+
+
+c. There's a positive trend in the relationship between budget and gross: movies that cost more money to make tend to make more at the box office. However, there’s quite a bit of deviation from the trend. For example, there are several movies that make much more than expected.
+
+
+
+## Exercise 6: Modeling `intgross_mil`
+
+a. 
+
+```{r}
+movie_model <- lm(intgross_mil ~ budget_mil, data = bechdel)
+coef(summary(movie_model))
+```
+
+
+b. E[intgross_mil | budget_mil] = 27.138951 + 3.063147 budget_mil (Answers may vary due to rounding)
+
+c. For every extra 1 million dollars spent on making the movie, the gross tends to increase by roughly \$3.06 million.
+
+d. It doesn't make sense to interpret the intercept in this model. This would be the gross of a movie that had a $0 budget. No such movies exist in this data set.
+
+
+
+## Exercise 7: Predictions and residuals
+
+Answers might vary quite a bit due to rounding!
+
+```{r}
+# Part a
+# Write a comment if there's no prediction from scratch (if they only use predict())
+27.138951 + 3.063147 * 290
+predict(movie_model, newdata = data.frame(budget_mil = 290))
+
+# Part b
+3172 - 915.4516
+
+# Part c
+# Model drastically underestimated Titanic's gross earnings
+```

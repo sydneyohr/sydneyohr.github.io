@@ -1,0 +1,31 @@
+{
+    "id": "E1BCFE89",
+    "path": "~/Desktop/STAT253/Notes/02-regression-model-evaluation-notes.qmd",
+    "project_path": null,
+    "type": "quarto_markdown",
+    "hash": "616269960",
+    "contents": "",
+    "dirty": false,
+    "created": 1726171250927.0,
+    "source_on_save": false,
+    "relative_order": 13,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "rmdVisualMode": "true",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "11922:0",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "cursorPosition": "474,0",
+        "scrollLine": "121"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1726192557,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1726192557114,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,3 @@
+"0","# Density plot"
+"0","ggplot(weather, aes(x = temp3pm)) + "
+"0","  geom_density() "

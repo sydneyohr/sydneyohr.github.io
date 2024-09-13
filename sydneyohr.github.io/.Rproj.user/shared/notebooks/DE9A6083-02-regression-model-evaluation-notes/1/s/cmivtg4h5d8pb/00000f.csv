@@ -1,0 +1,8 @@
+"0","# YOUR TURN"
+"0","# Residual plot for bike_model_2"
+"0","bike_model_2 %>% "
+"0","  augment(new_data = bikes) %>% "
+"0","  ggplot(aes(x = .pred, y = .resid)) + "
+"0","    geom_point() + "
+"0","    geom_hline(yintercept = 0)"
+"0",""

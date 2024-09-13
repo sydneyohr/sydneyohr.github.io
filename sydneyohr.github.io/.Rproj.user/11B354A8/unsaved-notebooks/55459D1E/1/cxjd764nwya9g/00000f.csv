@@ -1,0 +1,5 @@
+"0","# Histogram "
+"0","ggplot(weather, aes(x = temp3pm)) + "
+"0","  geom_histogram(color = ""white"")  "
+"1","[38;5;253m`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.[39m
+"

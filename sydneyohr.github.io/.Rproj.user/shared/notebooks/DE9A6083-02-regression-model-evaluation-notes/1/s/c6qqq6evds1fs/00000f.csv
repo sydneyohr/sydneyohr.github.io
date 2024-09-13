@@ -1,0 +1,7 @@
+"0","# Fit bike_model_1"
+"0","bike_model_1 <- lm_spec %>% "
+"0","  fit(rides ~ windspeed + temp, data = bikes)"
+"0",""
+"0","# Check out the coefficients"
+"0","bike_model_1 %>% "
+"0","  tidy()"

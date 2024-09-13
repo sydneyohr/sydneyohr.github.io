@@ -1,0 +1,3 @@
+"0","# Obtain R^2 for bike_model_1"
+"0","bike_model_1 %>% "
+"0","  glance()"

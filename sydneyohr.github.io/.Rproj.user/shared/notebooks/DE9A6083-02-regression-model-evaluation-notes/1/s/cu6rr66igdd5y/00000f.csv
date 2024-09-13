@@ -1,0 +1,5 @@
+"0","# Calculate predicted ridership (.pred) & corresponding residuals (.resid) using bike_model_1"
+"0","# Just look at first 6 days"
+"0","bike_model_1 %>% "
+"0","  augment(new_data = bikes) %>% "
+"0","  head()"

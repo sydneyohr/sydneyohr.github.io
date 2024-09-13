@@ -1,0 +1,4 @@
+"0","# YOUR TURN: MAE for bike_model_2"
+"0","bike_model_2 %>% "
+"0","  augment(new_data = bikes) %>% "
+"0","  summarize(mae = abs(mean(.resid)))"

@@ -1,0 +1,30 @@
+"0","# The sf package comes with a North Carolina shapefile:
+nc <- st_read(system.file(""shape/nc.shp"", package = ""sf""))
+"
+"1","Reading layer `"
+"1","nc"
+"1","' from data source "
+"1","
+"
+"1","  "
+"1","`"
+"1","/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/sf/shape/nc.shp"
+"1","' "
+"1","using driver `"
+"1","ESRI Shapefile"
+"1","'"
+"1","
+"
+"1","Simple feature collection with 100 features and 14 fields"
+"1","
+"
+"1","Geometry type: MULTIPOLYGON
+"
+"1","Dimension:     XY
+"
+"1","Bounding box:  "
+"1","xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965"
+"1","
+"
+"1","Geodetic CRS:  NAD27
+"
