@@ -3,23 +3,29 @@ title: "Sydney Ohr"
 about:
   id: intro-heading
   template: trestles
-  image: images/profilepic.jpg
+  image: images/sydneyselfie.jpg
   links: 
     - icon: github
       href: https://github.com/sydneyohr
+    - icon: linkedin
+      href: www.linkedin.com/in/sydney-ohr-a242742a7
 ---
 
-Hello! My name is Sydney Ohr and I am a current junior at Macalester College pursuing a B.A in Data Science.
+Hello! My name is Sydney Ohr and I am a rising senior at Macalester College pursuing a B.A in Data Science. I am passionate about using data to tell stories and solve problems, and I am excited to continue learning and growing in the field of data science.
 
 \
 **Education**
 
 **Macalester College \| St. Paul MN**
 
-**B.A. in Data Science \| August 2022 - May 2026**
-
+**B.A. in Data Science, Biology minor \| August 2022 - May 2026**
 \
 
+**Relevant Coursework:**
+Database Management, Statistical Machine Learning, Intermediate Data Science, Object Oriented Programming, Linear Algebra
+
+**In Progress Courses:**
+Computational Biology, Probability, Projects in Data Science
 
 
 \

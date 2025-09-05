@@ -1,0 +1,10 @@
+---
+title: STEAM Summer Project
+image: steamppt.png
+about: 
+  template: solana
+  image: steamppt.png
+---
+ In collaboration with Dr. Kelsey Grinde along with two Macalester peers, I helped debug and increase user experience of Dr. Grinde's R package, STEAM. I contributed to the in progress work of implementing parallel processing and experimenting with packages such as Rccp and RcppParallel. 
+ 
+To access Dr. Grinde's [STEAM](https://github.com/GrindeLab/STEAM)

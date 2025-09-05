@@ -1,5 +1,12 @@
 ---
 title: "Projects"
+listing:
+  contents: projects
+  sort: "title desc"
+  type: grid
+page-layout: full
+comments: false
 ---
 
-I will add projects here eventually.
+
+

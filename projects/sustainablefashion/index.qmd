@@ -1,0 +1,12 @@
+---
+title: Fashion Transparency Index
+image: FTI.png
+about: 
+  template: solana
+  image: FTI.png
+---
+In collaboration with two other peers, I created a Shiny App using data from the Fashion Transparency Index to shine light on what fashion companies were being honest with their sustainability efforts in hopes that consumers could hold brands accountable. 
+
+**Product**
+
+[Fashion Transparency Index App](https://github.com/shellybeee/sustainable-fashion.git)

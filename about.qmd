@@ -1,9 +1,5 @@
 ---
-title: "About"
+title: "About Me"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+I am originally from the Chicago suburbs but I have been loving living in Minnesota! I enjoy cooking, bouldering, estate/garage sales, and caffeinated beverages. 

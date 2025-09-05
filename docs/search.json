@@ -2,22 +2,43 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "About Me",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "I am originally from the Chicago suburbs but I have been loving living in Minnesota! I enjoy cooking, bouldering, estate/garage sales, and caffeinated beverges"
   },
   {
     "objectID": "projects.html",
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "I will add projects here eventually."
+    "text": "STEAM Summer Project\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFashion Transparency Index\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Sydney Ohr",
     "section": "",
-    "text": "Hello! My name is Sydney Ohr and I am a current junior at Macalester College pursuing a B.A in Data Science.\n\nEducation\nMacalester College | St. Paul MN\nB.A. in Data Science | August 2022 - May 2026"
+    "text": "Hello! My name is Sydney Ohr and I am a rising senior at Macalester College pursuing a B.A in Data Science. I am passionate about using data to tell stories and solve problems, and I am excited to continue learning and growing in the field of data science.\n\nEducation\nMacalester College | St. Paul MN\nB.A. in Data Science, Biology minor | August 2022 - May 2026\n\nRelevant Coursework: Database Management, Statistical Machine Learning, Intermediate Data Science, Object Oriented Programming, Linear Algebra\nIn Progress Courses: Computational Biology, Probability, Projects in Data Science"
+  },
+  {
+    "objectID": "projects.html#projects",
+    "href": "projects.html#projects",
+    "title": "Projects",
+    "section": "",
+    "text": "Fashion Transperancy Index App"
+  },
+  {
+    "objectID": "projects/sustainablefashion/index.html",
+    "href": "projects/sustainablefashion/index.html",
+    "title": "Fashion Transparency Index",
+    "section": "",
+    "text": "In collaboration with two other peers, I created a Shiny App using data from the Fashion Transparency Index to shine light on what fashion companies were being honest with their sustainability efforts in hopes that consumers could hold brands accountable.\nProduct\nFashion Transparency Index App"
+  },
+  {
+    "objectID": "projects/steamresearch/index.html",
+    "href": "projects/steamresearch/index.html",
+    "title": "STEAM Summer Project",
+    "section": "",
+    "text": "In collaboration with Dr. Kelsey Grinde along with two Macalester peers, I helped debug and increase user experience of Dr. Grinde’s R package, STEAM. I contributed to the in progress work of implementing parallel processing and experimenting with packages such as Rccp and RcppParallel.\nTo access Dr. Grinde’s STEAM"
   }
 ]

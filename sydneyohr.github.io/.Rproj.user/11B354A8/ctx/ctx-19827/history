@@ -1,0 +1,512 @@
+# Load packages we'll need to wrangle and plot the data
+library(tidyverse)
+# Load the data
+bikes <- read.csv("https://mac-stat.github.io/data/bike_share.csv")
+# Only keep / select some variables
+# And round some variables (just for our demo purposes)
+bikes <- bikes %>%
+rename(rides = riders_registered, temp = temp_feel) %>%
+mutate(windspeed = round(windspeed), temp = round(temp)) %>%
+select(rides, windspeed, temp, weekend)
+View(bikes)
+ggplot(bikes, aes(y = rides, x = temp, color = windspeed)) +
+geom_point() +
+facet_wrap(~weekend)
+# Load package
+library(tidymodels)
+lm_spec <- linear_reg() %>%   # we want a linear regression model
+set_mode("regression") %>%  # this is a regression task (y is quantitative)
+set_engine("lm")            # we'll estimate the model using the lm function
+# Check it out
+lm_spec
+# Fit bike_model_1
+bike_model_1 <- lm_spec %>%
+fit(rides ~ windspeed + temp, data = bikes)
+# Check out the coefficients
+bike_model_1 %>%
+tidy()
+# YOUR TURN
+# Fit bike_model_2 & check out the coefficients
+bike_model_2 <- lm_spec %>%
+fit(rides ~ windspeed + temp + weekend, data = bikes)
+bike_model_2 %>%
+tidy()
+bike_model_2 %>%
+glance()
+# Obtain R^2 for bike_model_1
+bike_model_1 %>%
+glance()
+# Predict ridership on a 60 degree day with 20 mph winds
+bike_model_1 %>%
+augment(new_data = data.frame(windspeed = 20, temp = 60))
+# Predict ridership on a 60 degree day with 20 mph winds
+bike_model_1 %>%
+predict(new_data = data.frame(windspeed = 20, temp = 60))
+# Calculate predicted ridership (.pred) & corresponding residuals (.resid) using bike_model_1
+# Just look at first 6 days
+bike_model_1 %>%
+augment(new_data = bikes) %>%
+head()
+?mae
+# Calculate MAE for the first model
+bike_model_1 %>%
+augment(new_data = bikes) %>%
+mae(truth = rides, estimate = .pred)
+# YOUR TURN
+# Calculate MAE for the second model
+bike_model_2 %>%
+augment(new_data = bikes) %>%
+mae(truth = rides, estimate = .pred)
+bike_model_1 %>%
+augment(new_data = bikes) %>%
+summarize(mae = abs(mean(.resid)))
+# YOUR TURN: MAE for bike_model_2
+bike_model_1 %>%
+augment(new_data = bikes) %>%
+summarize(mae = abs(mean(.resid)))
+# YOUR TURN: MAE for bike_model_2
+bike_model_2 %>%
+augment(new_data = bikes) %>%
+summarize(mae = abs(mean(.resid)))
+# Residual plot for bike_model_1
+bike_model_1 %>%
+augment(new_data = bikes) %>%
+ggplot(aes(x = .pred, y = .resid)) +
+geom_point() +
+geom_hline(yintercept = 0)
+bike_model_1 %>%
+augment(new_data = bikes) %>%
+ggplot(aes(x = .pred, y = .resid)) +
+geom_point() +
+geom_hline(yintercept = 0)
+# YOUR TURN
+# Residual plot for bike_model_2
+bike_model_2 %>%
+augment(new_data = bikes) %>%
+ggplot(aes(x = .pred, y = .resid)) +
+geom_point() +
+geom_hline(yintercept = 0)
+# Import data
+simulated_data <- read.csv("https://ajohns24.github.io/data/simulated_data.csv")
+# Model y by the 6 input variables
+new_model <- lm_spec %>%
+fit(y ~ x1 + x2 + x3 + x4 + x5 + x6, simulated_data)
+library(GGally)
+ggpairs(simulated_data)
+View(simulated_data)
+new_model %>%
+augment(new_data = simulated_data) %>%
+ggplot(aes(x = .pred, y = .resid)) +
+geom_point(size = 0.1) +
+geom_hline(yintercept = 0)
+library(tidyverse)
+weather <- read_csv("https://mac-stat.github.io/data/sfo_weather.csv")
+weather %>%
+select(High, dateInYear, Record) %>%
+filter(Record == TRUE)
+lastDayInMonth <- weather %>%
+group_by(Month) %>%
+filter(Day == max(Day)) %>%
+slice(1:11)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2)
+# scale_x_continuous(breaks = , labels= )
+# month.abb
+install.packages("quarto")
+library(quarto)
+quarto_render()
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = lastDayInMonth, labels = month.abb)
+month.abb
+month.name
+View(lastDayInMonth)
+a <- rbind(c(1,3,4), c(-4,2,-6), c(-3,-2,-7))
+rref(a)
+library(pracma)
+rref(a)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = dayInYear, labels = month.abb)
+library(tidyverse)
+weather <- read_csv("https://mac-stat.github.io/data/sfo_weather.csv")
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = dayInYear, labels = month.abb)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = dateInYear, labels = month.abb)
+View(weather)
+f <- rbind(c(1,2,1,0), c(1,3,-2,0))
+rref(f)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(31,59,90,120,151,181,212,243,273,304,334, 365), labels = month.abb)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(31,59,90,120,151,181,212,243,273,304,334, 365), labels = month.abb)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+weather %>%
+select(High, dateInYear, Record) %>%
+filter(Record == TRUE)
+lastDayInMonth <- weather %>%
+group_by(Month) %>%
+filter(Day == max(Day)) %>%
+slice(0:11)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+# scale_x_continuous(breaks = , labels= )
+# month.abb
+weather %>%
+select(High, dateInYear, Record) %>%
+filter(Record == TRUE)
+lastDayInMonth <- weather %>%
+group_by(Month) %>%
+filter(Day == max(Day)) %>%
+slice(1:11)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+# scale_x_continuous(breaks = , labels= )
+# month.abb
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+lastDayInMonth <- weather %>%
+group_by(Month) %>%
+filter(Day == max(Day)) %>%
+slice(1:10)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+weather %>%
+select(High, dateInYear, Record) %>%
+filter(Record == TRUE)
+lastDayInMonth <- weather %>%
+group_by(Month) %>%
+filter(Day == max(Day)) %>%
+slice(1:11)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "grey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "grey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+# scale_x_continuous(breaks = , labels= )
+# month.abb
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic()
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_minimal()
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic(
+)
+weather %>%
+ggplot() +
+geom_linerange(aes(x = dateInYear, y = CulmPrec))
+weather %>%
+ggplot() +
+geom_linerange(aes(x = dateInYear, y = CulmPrec, ymin = 0, ymax = max(CulmPrec)))
+weather %>%
+ggplot() +
+geom_linerange(aes(x = dateInYear, y = CulmPrec, ymin = 0, ymax))
+weather %>%
+ggplot() +
+geom_linerange(aes(x = dateInYear, y = CulmPrec, ymin = 0))
+geom_bar(aes(x = dateInYear, y = CulmPrec)
+weather %>%
+weather %>%
+ggplot() +
+geom_bar(aes(x = dateInYear, y = CulmPrec))
+quarto_render()
+quarto_render()
+weather %>%
+filter(Record == TRUE)
+points <- weather %>%
+filter(Record == TRUE)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh))
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh, shape = 25))
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh, shape = 25))
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh, shape = "25"))
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 26)
+points <- weather %>%
+filter(Record == TRUE)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, linetype = 3), color = "lightgrey",) +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, linetype = "dotted"), color = "lightgrey",) +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, linetype = 3), color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3) +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "grey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), linetype = 3, color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = c(0,31,59,90,120,151,181,212,243,273,304,334), labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+lastDayInMonth %>%
+mutate(middle = dateInYear-15)
+middlemonth <- lastDayInMonth %>%
+mutate(middle = dateInYear-15)
+View(middlemonth)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), linetype = 3, color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = middlemonth$middle, labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), linetype = 3, color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = middlemonth$middle, labels = month.abb) +
+theme_bw() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), linetype = 3, color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = middlemonth$middle, labels = month.abb) +
+theme_void() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(weather) +
+geom_vline(data = lastDayInMonth, aes(xintercept = dateInYear, color = "lightgrey"), linetype = 3, color = "lightgrey") +
+geom_vline(data = lastDayInMonth, aes(xintercept = 0), linetype = 3, color = "lightgrey") +
+geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ecebe3', linewidth = 1.2) +
+theme_classic() +
+geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA', linewidth = 1.2) +
+geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248', linewidth = 1.2) +
+scale_x_continuous(breaks = middlemonth$middle, labels = month.abb) +
+theme_classic() +
+geom_point(data = points, aes(x = dateInYear, y = RecordHigh), shape = 25)
+ggplot(bechdel, aes(y = intgross_mil, x = budget_mil)) +
