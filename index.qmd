@@ -8,7 +8,7 @@ about:
     - icon: github
       href: https://github.com/sydneyohr
     - icon: linkedin
-      href: www.linkedin.com/in/sydney-ohr-a242742a7
+      href: https://linkedin.com/in/sydney-ohr-a242742a7
 ---
 
 Hello! My name is Sydney Ohr and I am a rising senior at Macalester College pursuing a B.A in Data Science. I am passionate about using data to tell stories and solve problems, and I am excited to continue learning and growing in the field of data science.
