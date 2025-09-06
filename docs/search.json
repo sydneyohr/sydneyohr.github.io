@@ -4,14 +4,14 @@
     "href": "about.html",
     "title": "About Me",
     "section": "",
-    "text": "I am originally from the Chicago suburbs but I have been loving living in Minnesota! I enjoy cooking, bouldering, estate/garage sales, and caffeinated beverges"
+    "text": "I am originally from the Chicago suburbs but I have been loving life in Minnesota! I enjoy cooking, golfing, bouldering, estate/garage sales, and caffeinated beverages."
   },
   {
     "objectID": "projects.html",
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "STEAM Summer Project\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFashion Transparency Index\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "STEAM Summer Project\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRacial Covenants\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFashion Transparency Index\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -40,5 +40,12 @@
     "title": "STEAM Summer Project",
     "section": "",
     "text": "In collaboration with Dr. Kelsey Grinde along with two Macalester peers, I helped debug and increase user experience of Dr. Grinde’s R package, STEAM. I contributed to the in progress work of implementing parallel processing and experimenting with packages such as Rccp and RcppParallel.\nTo access Dr. Grinde’s STEAM"
+  },
+  {
+    "objectID": "projects/racialcovenants/Index.html",
+    "href": "projects/racialcovenants/Index.html",
+    "title": "Racial Covenants",
+    "section": "",
+    "text": "This is my favorite project because it was my first ever data science final project! Using data from the University of Minnesota’s Mapping Prejudices dataset and U.S. census data, my peers and I used Leaflet to map racial covenants in Ramsey County cities and examine their demographics today. Our research question: How has housing been historically racially discriminatory in MSP, and can we still see it today?"
   }
 ]

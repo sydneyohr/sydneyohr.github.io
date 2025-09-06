@@ -1,5 +1,12 @@
 ---
 title: "About Me"
+format: html
 ---
 
-I am originally from the Chicago suburbs but I have been loving living in Minnesota! I enjoy cooking, bouldering, estate/garage sales, and caffeinated beverages. 
+I am originally from the Chicago suburbs but I have been loving life in Minnesota! I enjoy cooking, golfing, bouldering, estate/garage sales, and caffeinated beverages. 
+
+::: {layout-ncol=2}
+![](images/sydneygolf.jpg){fig-cap="My fourth year playing for the Macalester Women's Golf Team"}
+![](images/climbing.jpg){fig-cap=""}
+
+:::

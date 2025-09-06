@@ -1,0 +1,11 @@
+---
+title: Racial Covenants
+format: html
+image: RC.png
+
+---
+This is my favorite project because it was my first ever data science final project! Using data from the University of Minnesota's Mapping Prejudices dataset and U.S. census data, my peers and I used Leaflet to map racial covenants in Ramsey County cities and examine their demographics today. Our research question: How has housing been historically racially discriminatory in MSP, and can we still see it today?
+
+
+<iframe src="racialcovenants.pdf" width="100%" height="1000px" style="border:none;"></iframe>
+
